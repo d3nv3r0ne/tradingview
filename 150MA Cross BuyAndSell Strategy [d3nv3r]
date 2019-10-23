@@ -3,14 +3,67 @@
 // @inspiration [LazyBear]
 // List of all my indicators: nowhere for now
 //
+// How to use it : 
+// daily chart
+// copy all and paste the content into the Pine Editor Tab at the bottom of the tradingview pannel
+// [Save As...] and [Add to Chart] in top-right of the Pine Editor
+//
+// -- if you dont want old buy/sell signals
+// modify year >= wantedYearToStart
+//
+// -- if you want to change the sma cross 
+// modify longCondition = crossover(close,sma(close, wantedMovingAverage))
+// modify shortCondition = crossunder(close, sma(close, wantedMovingAverage))
+//
+//
 //@version=4
 strategy(shorttitle = "150MA X B/S", title="150MA Cross BuyAndSell Strategy [d3nv3r]", overlay=true)
 
-longCondition = crossover(close,sma(close, 150))
-shortCondition = crossunder(close, sma(close, 150))
+//
+// Variables length
+//
+lengthBS = input(title="Length MA B/S Signal", type=input.integer, defval=150, minval=1)
+length1 = input(title="Length MA 1", type=input.integer, defval=20, minval=3)
+length2 = input(title="Length MA 2", type=input.integer, defval=50, minval=5)
+length3 = input(title="Length MA 3", type=input.integer, defval=100, minval=7)
+length4 = input(title="Length MA 4", type=input.integer, defval=200, minval=13)
 
+//
+// Variable Source
+//
+src = input(close, title="Source")
+
+//
+// Variables
+// Quadruple SMA + SMA B/S 
+//
+maBS = sma(src, lengthBS)
+ma1 = sma(src, length1)
+ma2 = sma(src, length2)
+ma3 = sma(src, length3)
+ma4 = sma(src, length4)
+
+
+//
+// Variables Buy/Sell
+//
+longCondition = crossover(close,maBS)
+shortCondition = crossunder(close,maBS)
+
+//
+// Logic Buy/Sell
+//
 if year >= 2012
     if (longCondition)
         strategy.entry("Long", strategy.long)
     if (shortCondition)
         strategy.entry("short", strategy.short)
+
+//
+// Plot Quadruple SMA + SMA B/S
+//
+plot(maBS, color=color.green)
+plot(ma1, color=color.purple)
+plot(ma2, color=color.green)
+plot(ma3, color=color.orange)
+plot(ma4, color=color.red)
