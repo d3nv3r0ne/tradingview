@@ -1,0 +1,16 @@
+//
+// @author d3nv3r 
+// @inspiration [LazyBear]
+// List of all my indicators: nowhere for now
+//
+//@version=4
+strategy(shorttitle = "150MA X B/S", title="150MA Cross BuyAndSell Strategy [d3nv3r]", overlay=true)
+
+longCondition = crossover(close,sma(close, 150))
+shortCondition = crossunder(close, sma(close, 150))
+
+if year >= 2012
+    if (longCondition)
+        strategy.entry("Long", strategy.long)
+    if (shortCondition)
+        strategy.entry("short", strategy.short)
