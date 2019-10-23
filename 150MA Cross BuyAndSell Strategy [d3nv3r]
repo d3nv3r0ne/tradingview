@@ -19,6 +19,7 @@ length1 = input(title="Length MA 1", type=input.integer, defval=20, minval=3)
 length2 = input(title="Length MA 2", type=input.integer, defval=50, minval=5)
 length3 = input(title="Length MA 3", type=input.integer, defval=100, minval=7)
 length4 = input(title="Length MA 4", type=input.integer, defval=200, minval=13)
+startYear = input(title="start year", type=input.integer, defval=2012, minval=2011)
 
 //
 // Variable Source
@@ -45,7 +46,7 @@ shortCondition = crossunder(close,maBS)
 //
 // Logic Buy/Sell
 //
-if year >= 2012
+if year >= startYear
     if (longCondition)
         strategy.entry("Long", strategy.long)
     if (shortCondition)
