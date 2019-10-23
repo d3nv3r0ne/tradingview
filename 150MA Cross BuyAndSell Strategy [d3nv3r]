@@ -8,14 +8,6 @@
 // copy all and paste the content into the Pine Editor Tab at the bottom of the tradingview pannel
 // [Save As...] and [Add to Chart] in top-right of the Pine Editor
 //
-// -- if you dont want old buy/sell signals
-// modify year >= wantedYearToStart
-//
-// -- if you want to change the sma cross 
-// modify longCondition = crossover(close,sma(close, wantedMovingAverage))
-// modify shortCondition = crossunder(close, sma(close, wantedMovingAverage))
-//
-//
 //@version=4
 strategy(shorttitle = "150MA X B/S", title="150MA Cross BuyAndSell Strategy [d3nv3r]", overlay=true)
 
@@ -62,7 +54,7 @@ if year >= 2012
 //
 // Plot Quadruple SMA + SMA B/S
 //
-plot(maBS, color=color.green)
+plot(maBS, color=color.yellow, linewidth=2)
 plot(ma1, color=color.purple)
 plot(ma2, color=color.green)
 plot(ma3, color=color.orange)
