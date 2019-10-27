@@ -9,21 +9,24 @@
 // [Save As...] and [Add to Chart] in top-right of the Pine Editor
 //
 //@version=4
-strategy(shorttitle = "150MA_X_B/S", title="150MA Cross BuyAndSell Strategy [d3nv3r]", overlay=true)
+strategy(shorttitle = "MA_X_B/S", title="150MA Cross BuyAndSell Strategy [d3nv3r]", overlay=true)
 
 //
-// Variables length
+// Variables inputs
 //
-lengthBS = input(title="Length MA B/S Signal", type=input.integer, defval=150, minval=1)
+showMABS = input(true, title="Show MA Cross")
+showMA1 = input(true, title="Show MA 1")
+showMA2 = input(true, title="Show MA 2")
+showMA3 = input(true, title="Show MA 3")
+showMA4 = input(true, title="Show MA 4")
+
+lengthBS = input(title="Length MA Cross", type=input.integer, defval=150, minval=1)
 length1 = input(title="Length MA 1", type=input.integer, defval=20, minval=3)
 length2 = input(title="Length MA 2", type=input.integer, defval=50, minval=5)
 length3 = input(title="Length MA 3", type=input.integer, defval=100, minval=7)
 length4 = input(title="Length MA 4", type=input.integer, defval=200, minval=13)
-startYear = input(title="start year", type=input.integer, defval=2012, minval=2011)
 
-//
-// Variable Source
-//
+startYear = input(title="start year", type=input.integer, defval=2012, minval=2011)
 src = input(close, title="Source")
 
 //
@@ -35,7 +38,6 @@ ma1 = sma(src, length1)
 ma2 = sma(src, length2)
 ma3 = sma(src, length3)
 ma4 = sma(src, length4)
-
 
 //
 // Variables Buy/Sell
@@ -55,8 +57,8 @@ if year >= startYear
 //
 // Plot Quadruple SMA + SMA B/S
 //
-plot(maBS, color=color.yellow, linewidth=2)
-plot(ma1, color=color.purple)
-plot(ma2, color=color.green)
-plot(ma3, color=color.orange)
-plot(ma4, color=color.red)
+plot(showMABS and maBS ? maBS : na, color=color.yellow, linewidth=2)
+plot(showMA1 and ma1 ? ma1 : na, color=color.purple)
+plot(showMA2 and ma2 ? ma2 : na, color=color.green)
+plot(showMA3 and ma3 ? ma3 : na, color=color.orange)
+plot(showMA4 and ma4 ? ma4 : na, color=color.red)
