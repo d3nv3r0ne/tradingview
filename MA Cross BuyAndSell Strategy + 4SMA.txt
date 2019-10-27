@@ -1,7 +1,7 @@
 //
 // @author d3nv3r 
 // @inspiration [LazyBear]
-// List of all my indicators: nowhere for now
+// List of all my indicators: https://github.com/d3nv3r0ne/tradingview
 //
 // How to use it : 
 // daily chart
