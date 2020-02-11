@@ -1,0 +1,133 @@
+//
+// @author d3nv3r
+// @inspiration [LazyBear]
+// List of all my indicators: https://github.com/d3nv3r0ne/tradingview
+//
+// How to use it :
+//  any chart but be careful with dates
+//  it's a way to have every EMA/SMA and a Buy and Sell strategy on the same chart
+//
+//  with the configuration panel :
+//      you can use the strategy or not
+//      you can chose to use an EMA strategy instead of a SMA strategy
+//      you can select lenght of the E/SMA Cross strategy
+//      you can select lenght of every 4 SMA + 4 EMA
+//      you can chose to show or not any MA
+//
+//@version=4
+strategy(shorttitle = "B/S X + 4 SMA + 4 EMA", title="4 SMA + 4 EMA + Buy&Sell Cross (EMA or SMA) Strategy [d3nv3r]", overlay=true)
+
+//
+// Variables inputs
+//
+useStrategy = input(true, title="Show Buy and Sell Cross strategy")
+useEMA = input(false, title="Use EMA Cross strategy")
+
+lengthBS = input(title="Length MA Cross", type=input.integer, defval=140, minval=1)
+
+lengthSMA1 = input(title="Length MA 1", type=input.integer, defval=20, minval=3)
+lengthSMA2 = input(title="Length MA 2", type=input.integer, defval=50, minval=5)
+lengthSMA3 = input(title="Length MA 3", type=input.integer, defval=100, minval=7)
+lengthSMA4 = input(title="Length MA 4", type=input.integer, defval=200, minval=13)
+
+lengthEMA1 = input(title="Length EMA 1", type=input.integer, defval=20, minval=3)
+lengthEMA2 = input(title="Length EMA 2", type=input.integer, defval=50, minval=5)
+lengthEMA3 = input(title="Length EMA 3", type=input.integer, defval=100, minval=7)
+lengthEMA4 = input(title="Length EMA 4", type=input.integer, defval=200, minval=13)
+
+showMA1 = input(true, title="Show MA 1")
+showMA2 = input(true, title="Show MA 2")
+showMA3 = input(true, title="Show MA 3")
+showMA4 = input(true, title="Show MA 4")
+
+showEMA1 = input(true, title="Show EMA 1")
+showEMA2 = input(true, title="Show EMA 2")
+showEMA3 = input(true, title="Show EMA 3")
+showEMA4 = input(true, title="Show EMA 4")
+
+startYear = input(title="start year", type=input.integer, defval=2011, minval=2011)
+startMonth = input(title="start month", type=input.integer, defval=01, minval=01, maxval=12)
+
+src = input(close, title="Source")
+
+//
+// Variables
+// EMA + SMA for B/S strat + 4 SMA + 4 EMA
+//
+maBS = sma(src, lengthBS)
+emaBS = ema(src, lengthBS)
+
+ma1 = sma(src, lengthSMA1)
+ma2 = sma(src, lengthSMA2)
+ma3 = sma(src, lengthSMA3)
+ma4 = sma(src, lengthSMA4)
+
+ema1 = ema(src, lengthEMA1)
+ema2 = ema(src, lengthEMA2)
+ema3 = ema(src, lengthEMA3)
+ema4 = ema(src, lengthEMA4)
+
+//
+// Logic Buy/Sell
+//
+longConditionSMA = crossover(src,maBS)
+shortConditionSMA = crossunder(src,maBS)
+longConditionEMA = crossover(src,emaBS)
+shortConditionEMA = crossunder(src,emaBS)
+
+//  if we use the strategy - default : true
+//      if date above startYear - default : 2011
+//                    startMonth - default : january
+//          if useEMA - default : false
+//              do EMA crossunder/crossover strategy
+//          else
+//              do SMA crossunder/crossover strategy
+//      else
+//          do nothing
+//  else
+//      do nothing
+if (useStrategy)
+    if year > startYear
+        if useEMA
+            if (longConditionEMA)
+                strategy.entry("Long", strategy.long)
+            if (shortConditionEMA)
+                strategy.entry("short", strategy.short)
+        else
+            if (longConditionSMA)
+                strategy.entry("Long", strategy.long)
+            if (shortConditionSMA)
+                strategy.entry("short", strategy.short)
+    else
+        if year == startYear
+            if month >= startMonth
+                if useEMA
+                    if (longConditionEMA)
+                        strategy.entry("Long", strategy.long)
+                    if (shortConditionEMA)
+                        strategy.entry("short", strategy.short)
+                else
+                    if (longConditionSMA)
+                        strategy.entry("Long", strategy.long)
+                    if (shortConditionSMA)
+                        strategy.entry("short", strategy.short)
+
+//
+// Plot X B/S Strategy + 4 SMA + 4 EMA
+//
+
+// use of double ternary operator, take your time ;) i didn't find any otherway to do it, it also change the line style na would use default
+plot(useStrategy ? useEMA ? emaBS : maBS : na, color=color.blue, linewidth=3, style=useEMA ? plot.style_stepline : na)
+
+plot(showMA1 and ma1 ? ma1 : na, color=color.purple, linewidth=2)
+plot(showMA2 and ma2 ? ma2 : na, color=color.green, linewidth=2)
+plot(showMA3 and ma3 ? ma3 : na, color=color.orange, linewidth=2)
+plot(showMA4 and ma4 ? ma4 : na, color=color.red, linewidth=2)
+
+plot(showEMA1 and ema1 ? ema1 : na, color=color.purple, style=plot.style_stepline, linewidth=2)
+plot(showEMA2 and ema2 ? ema2 : na, color=color.green, style=plot.style_stepline, linewidth=2)
+plot(showEMA3 and ema3 ? ema3 : na, color=color.orange, style=plot.style_stepline, linewidth=2)
+plot(showEMA4 and ema4 ? ema4 : na, color=color.red, style=plot.style_stepline, linewidth=2)
+
+// List of all my indicators: https://github.com/d3nv3r0ne/tradingview
+// PEACE !
